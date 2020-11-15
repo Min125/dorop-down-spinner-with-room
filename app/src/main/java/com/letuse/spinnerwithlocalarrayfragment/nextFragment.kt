@@ -65,25 +65,42 @@ class nextFragment : Fragment() {
             vm.delete()
         }
 
-        //Spinner
+        vm.allItem.observe(
+            viewLifecycleOwner, Observer {
+
+                //Spinner
 //        val data = arrayOf("No Category", "Create New Category",category.category_name) => lateinit property category has not been initialized
-        val data = arrayOf("No Category", "Create New Category")
-        var adapter = context?.let { ArrayAdapter(it, R.layout.list_item, data) }
-        mySpinner.adapter = adapter
+                var dataList = arrayOfNulls<String>(it.size+2)
+                dataList[0] = "No Category"
+                dataList[1] = "Create New Category"
+                var count = 2
 
-        mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                if (position.equals(0)) {
-                } else if (position.equals(1)) {
-                    findNavController().navigate(nextFragmentDirections.actionNextFragmentToCategoryFragment())
-                    mySpinner.setSelection(0);
+                for ( data in it){
+                    dataList[count] = data.category_id.toString()
+                    count++
                 }
+
+                var adapter = context?.let { ArrayAdapter(it, R.layout.list_item, dataList) }
+                mySpinner.adapter = adapter
+
+                mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                    }
+
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                        if (position.equals(0)) {
+                        } else if (position.equals(1)) {
+                            findNavController().navigate(nextFragmentDirections.actionNextFragmentToCategoryFragment())
+                            mySpinner.setSelection(0);
+                        }
+                    }
+                }
+
             }
-        }
+        )
+
+
 
     }
 }
